@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Jokes Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        #joke-display {
+            min-height: 120px;
+            margin-bottom: 20px;
+        }
+        #setup {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        #punchline {
+            font-size: 1.2rem;
+            color: #007bff;
+            font-weight: bold;
+            min-height: 1.5em;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>😂 Joke Generator</h1>
+    <div id="joke-display">
+        <p id="setup">Click the button for a joke!</p>
+        <p id="punchline"></p>
+    </div>
+    <button id="next-joke">Tell Me Another!</button>
+</div>
+
+<script>
+    const jokes = [
+        { "setup": "Why don't scientists trust atoms?", "punchline": "Because they make up everything!" },
+        { "setup": "What do you call a fake noodle?", "punchline": "An impasta!" },
+        { "setup": "Why did the scarecrow win an award?", "punchline": "Because he was outstanding in his field!" },
+        { "setup": "Why don't skeletons fight each other?", "punchline": "They don't have the guts." },
+        { "setup": "What do you call a belt made out of watches?", "punchline": "A waist of time!" },
+        { "setup": "How does a penguin build its house?", "punchline": "Igloos it together!" },
+        { "setup": "Why did the bicycle fall over?", "punchline": "Because it was two-tired!" },
+        { "setup": "What do you call a bear with no teeth?", "punchline": "A gummy bear!" },
+        { "setup": "Why did the math book look sad?", "punchline": "Because it had too many problems." },
+        { "setup": "What do you call a fly without wings?", "punchline": "A walk!" },
+        { "setup": "What did the ocean say to the beach?", "punchline": "Nothing, it just waved." },
+        { "setup": "Why can't Elsa have a balloon?", "punchline": "Because she will let it go!" },
+        { "setup": "What do you call a sleeping dinosaur?", "punchline": "A dino-snore!" },
+        { "setup": "Why did the cookie go to the doctor?", "punchline": "Because he was feeling crumbly." },
+        { "setup": "What do you call a pile of cats?", "punchline": "A meow-ntain!" },
+        { "setup": "Why did the golfer bring two pairs of pants?", "punchline": "In case he got a hole in one!" },
+        { "setup": "What did one plate say to the other?", "punchline": "Dinner is on me!" },
+        { "setup": "Why was the computer cold?", "punchline": "It left its Windows open!" },
+        { "setup": "What do you call a fish with no eyes?", "punchline": "Fsh!" },
+        { "setup": "Why are ghosts such bad liars?", "punchline": "Because they are easy to see through!" },
+        { "setup": "How do you make a tissue dance?", "punchline": "You put a little boogey in it!" },
+        { "setup": "What do you call a magic dog?", "punchline": "A Labracadabrador!" },
+        { "setup": "Why did the tomato turn red?", "punchline": "Because it saw the salad dressing!" },
+        { "setup": "What do you call a cow with no legs?", "punchline": "Ground beef!" },
+        { "setup": "Why did the stadium get hot after the game?", "punchline": "All the fans left!" },
+        { "setup": "What do you call an alligator in a vest?", "punchline": "An investigator!" },
+        { "setup": "Why did the banana go to the doctor?", "punchline": "Because it wasn't peeling well!" },
+        { "setup": "What do you call a pig that knows karate?", "punchline": "A pork chop!" },
+        { "setup": "Why was the broom late?", "punchline": "It over-swept!" },
+        { "setup": "What do you call a snowman with a six-pack?", "punchline": "An abdominal snowman!" },
+        { "setup": "Why did the grape stop in the middle of the road?", "punchline": "Because he ran out of juice!" },
+        { "setup": "What do you call a person who is afraid of Santa?", "punchline": "Claustrophobic!" },
+        { "setup": "Why did the man put his money in the freezer?", "punchline": "He wanted cold hard cash!" },
+        { "setup": "What do you call a dog that can do magic?", "punchline": "A hocus-pocus pup!" },
+        { "setup": "Why did the chicken cross the playground?", "punchline": "To get to the other slide!" },
+        { "setup": "What do you call a factory that makes okay products?", "punchline": "A satisfactory!" },
+        { "setup": "Why was 6 afraid of 7?", "punchline": "Because 7 8 9!" },
+        { "setup": "What do you call a bee that can't make up its mind?", "punchline": "A maybe!" },
+        { "setup": "Why did the tree go to the dentist?", "punchline": "To get a root canal!" },
+        { "setup": "What do you call a cheese that isn't yours?", "punchline": "Nacho cheese!" },
+        { "setup": "Why did the picture go to jail?", "punchline": "Because it was framed!" },
+        { "setup": "What do you call a sheep with no legs?", "punchline": "A cloud!" },
+        { "setup": "Why did the robot go on vacation?", "punchline": "He needed to recharge his batteries!" },
+        { "setup": "What do you call a cat that likes to bowl?", "punchline": "An alley cat!" },
+        { "setup": "Why did the skeleton go to the dance?", "punchline": "To rattle some bones!" },
+        { "setup": "What do you call a horse that lives next door?", "punchline": "A neigh-bor!" },
+        { "setup": "Why did the strawberry cry?", "punchline": "Because his parents were in a jam!" },
+        { "setup": "What do you call a dinosaur that is a noisy sleeper?", "punchline": "A tyranno-snore-us!" },
+        { "setup": "Why did the music teacher need a ladder?", "punchline": "To reach the high notes!" },
+        { "setup": "What do you call a duck that gets all A's?", "punchline": "A wise quacker!" },
+        { "setup": "Why did the orange stop?", "punchline": "Because it ran out of juice!" },
+        { "setup": "What do you call a monkey that likes potato chips?", "punchline": "A chipmunk!" },
+        { "setup": "Why did the girl smear peanut butter on the road?", "punchline": "To go with the traffic jam!" },
+        { "setup": "What do you call a fish with two knees?", "punchline": "A two-knee fish!" },
+        { "setup": "Why did the man run around his bed?", "punchline": "To catch up on his sleep!" },
+        { "setup": "What do you call a pencil with two erasers?", "punchline": "Pointless!" },
+        { "setup": "Why did the boy bring a ladder to school?", "punchline": "He wanted to go to high school!" },
+        { "setup": "What do you call a sleeping bull?", "punchline": "A bulldozer!" },
+        { "setup": "Why did the clock get kicked out of the library?", "punchline": "It tocked too much!" },
+        { "setup": "What do you call a group of disorganized cats?", "punchline": "A cat-astrophe!" },
+        { "setup": "Why did the farmer win an award?", "punchline": "He was outstanding in his field!" },
+        { "setup": "What do you call a dog that works for the government?", "punchline": "A CIA-mune!" },
+        { "setup": "Why did the spider go to computer class?", "punchline": "To learn how to use the web!" },
+        { "setup": "What do you call a bear with no ears?", "punchline": "B!" },
+        { "setup": "Why did the man buy a bird?", "punchline": "He wanted to have a tweet!" },
+        { "setup": "What do you call a fake rock?", "punchline": "A sham-rock!" },
+        { "setup": "Why did the cat go to the doctor?", "punchline": "He was feline poorly!" },
+        { "setup": "What do you call a dinosaur that is good with words?", "punchline": "A thesaurus!" },
+        { "setup": "Why did the man put his clock in the blender?", "punchline": "He wanted to see time fly!" },
+        { "setup": "What do you call a dog that likes to garden?", "punchline": "A bark-ologist!" },
+        { "setup": "Why did the boy throw his butter out the window?", "punchline": "He wanted to see a butterfly!" },
+        { "setup": "What do you call a fish that is a doctor?", "punchline": "A sturgeon!" },
+        { "setup": "Why did the girl take a ruler to bed?", "punchline": "To see how long she slept!" },
+        { "setup": "What do you call a cow that can play a musical instrument?", "punchline": "A moo-sician!" },
+        { "setup": "Why did the man put his car in the oven?", "punchline": "He wanted a hot rod!" },
+        { "setup": "What do you call a bear that is always cold?", "punchline": "A polar bear!" },
+        { "setup": "Why did the boy bring a shovel to school?", "punchline": "He wanted to dig for information!" },
+        { "setup": "What do you call a cat that can sit on a fence?", "punchline": "A fence-sitter!" },
+        { "setup": "Why did the man put his shoes in the fridge?", "punchline": "He wanted to keep his feet cool!" },
+        { "setup": "What do you call a dog that can tell time?", "punchline": "A watch dog!" },
+        { "setup": "Why did the girl bring a mirror to the game?", "punchline": "She wanted to see herself win!" },
+        { "setup": "What do you call a horse that can dance?", "punchline": "A pony-dancer!" },
+        { "setup": "Why did the man put his head in the oven?", "punchline": "He wanted to have a hot head!" },
+        { "setup": "What do you call a cat that is good at math?", "punchline": "An adder!" },
+        { "setup": "Why did the boy bring a camera to school?", "punchline": "He wanted to take a picture of his grades!" },
+        { "setup": "What do you call a dog that can play the piano?", "punchline": "A bark-hoven!" },
+        { "setup": "Why did the girl bring a umbrella to the party?", "punchline": "She heard there was going to be a sprinkle!" },
+        { "setup": "What do you call a bear that is good at sports?", "punchline": "An athletic bear!" },
+        { "setup": "Why did the man put his watch in the microwave?", "punchline": "He wanted to have a hot time!" },
+        { "setup": "What do you call a cat that is good at sports?", "punchline": "A sporty cat!" },
+        { "setup": "Why did the boy bring a net to school?", "punchline": "He wanted to catch some knowledge!" },
+        { "setup": "What do you call a dog that is good at math?", "punchline": "A math-hound!" },
+        { "setup": "Why did the girl bring a flashlight to the game?", "punchline": "She wanted to be the bright spot!" },
+        { "setup": "What do you call a horse that is good at math?", "punchline": "A math-pony!" },
+        { "setup": "Why did the man put his phone in the freezer?", "punchline": "He wanted to have a cold call!" },
+        { "setup": "What do you call a cat that is good at singing?", "punchline": "A meow-sician!" },
+        { "setup": "Why did the boy bring a map to school?", "punchline": "He wanted to find his way to success!" },
+        { "setup": "What do you call a dog that is good at singing?", "punchline": "A bark-itone!" },
+        { "setup": "Why did the girl bring a compass to the game?", "punchline": "She wanted to stay on course!" },
+        { "setup": "What do you call a horse that is good at singing?", "punchline": "A neigh-singer!" }
+    ];
+
+    const setupText = document.getElementById('setup');
+    const punchlineText = document.getElementById('punchline');
+    const btn = document.getElementById('next-joke');
+
+    function getJoke() {
+        // Clear old joke
+        punchlineText.innerText = "";
+        
+        // Pick random
+        const random = Math.floor(Math.random() * jokes.length);
+        const joke = jokes[random];
+
+        // Update Setup
+        setupText.innerText = joke.setup;
+
+        // Show punchline after a short delay for comedic effect
+        setTimeout(() => {
+            punchlineText.innerText = joke.punchline;
+        }, 1000);
+    }
+
+    btn.addEventListener('click', getJoke);
+</script>
+
+</body>
+</html>
